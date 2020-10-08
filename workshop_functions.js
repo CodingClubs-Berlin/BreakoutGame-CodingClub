@@ -60,6 +60,7 @@ function createBricks(brick, rows, columns) {
             bricks[column][row].position.y = row * (brick.height + brickPadding) + brickPadding / 2;
         }
     }
+    return bricks;
 }
 
 //
