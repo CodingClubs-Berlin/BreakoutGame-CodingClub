@@ -1,4 +1,4 @@
-# Game_CodingClub
+# Breakout CodingClub
 
 This is the repository for a Coding Club.  
 Further information about the workshop can be found in the [Documentation.pdf](https://github.com/JohannesTimmreck/Game_CodingClub/blob/master/Documentation.pdf).  
