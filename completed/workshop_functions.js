@@ -25,6 +25,16 @@ function drawBoard(width, height, colour) {
     gameBoard.fillRect(0, 0, width, height);
 }
 
+//
+// Game over function
+//
+
+function showGameOver() {
+    const gameOver = document.getElementById("gameOver");
+    gameOver.style.visibility = "visible";
+}
+
+
 function drawScore(score) {
     const scoreDiv = document.getElementById("score");
 
@@ -43,11 +53,6 @@ function drawLives(lives) {
 
 function copyObject(object) {
     return JSON.parse(JSON.stringify(object));
-}
-
-function showGameOver() {
-    const gameOver = document.getElementById("gameOver");
-    gameOver.style.visibility = "visible";
 }
 
 function createBricks(brick, rows, columns) {
