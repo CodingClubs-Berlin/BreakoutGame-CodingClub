@@ -25,16 +25,6 @@ function drawBoard(width, height, colour) {
     gameBoard.fillRect(0, 0, width, height);
 }
 
-//
-// Game over function
-//
-
-function showGameOver() {
-    const gameOver = document.getElementById("gameOver");
-    gameOver.style.visibility = "visible";
-}
-
-
 function drawScore(score) {
     const scoreDiv = document.getElementById("score");
 
@@ -47,25 +37,42 @@ function drawLives(lives) {
     scoreDiv.innerHTML = "Lives " + lives;
 }
 
+function showGameOver() {
+    const gameOver = document.getElementById("gameOver");
+    gameOver.style.visibility = "visible";
+}
+
+//
+// bricks
+//
+
+function createBricks(brick, rows, columns) {
+    var bricks = [];
+    for (var row=0; row < rows; row++) {
+        bricks[row] = [];
+        for(var column = 0; column < columns; column++) {
+            bricks[row][column] = copyObject(brick);
+            bricks[row][column].position.x = column * (brick.width + brickPadding) + brickPadding / 2;
+            bricks[row][column].position.y = row * (brick.height + brickPadding) + brickPadding / 2;
+        }
+    }
+    return bricks;
+}
+
+function foreachBrick(bricks, rows, columns, func) {
+    for (var column=0; column < columns; column++) {
+        for (var row = 0; row < rows; row++) {
+            func(bricks[row][column])
+        }
+    }
+}
+
 //
 // helper functions
 //
 
 function copyObject(object) {
     return JSON.parse(JSON.stringify(object));
-}
-
-function createBricks(brick, rows, columns) {
-    var bricks = [];
-    for (var column=0; column < columns; column++) {
-        bricks[column] = [];
-        for(var row = 0; row < rows; row++) {
-            bricks[column][row] = copyObject(brick);
-            bricks[column][row].position.x = column * (brick.width + brickPadding) + brickPadding / 2;
-            bricks[column][row].position.y = row * (brick.height + brickPadding) + brickPadding / 2;
-        }
-    }
-    return bricks;
 }
 
 //

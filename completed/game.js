@@ -37,63 +37,59 @@ const ball = {
 }
 
 // brick information
-const brick = {
+const brickTemplate = {
     position: {x: 0, y: 0},
     width: 75,
     height: 15,
     status: "active",
     colour: "#FF6B2B",
 }
-var brickPadding = 25;
-var rows = 4;
-var columns = board.width / (brick.width + brickPadding);
+const brickPadding = 25;
+const rows = 4;
+const columns = board.width / (brickTemplate.width + brickPadding);
+
 
 // create bricks and set position
-var bricks = createBricks(brick, rows, columns);
-for (var column=0; column < columns; column++) {
-    for(var row = 0; row < rows; row++) {
-        bricks[column][row].position.x = column * (brick.width + brickPadding) + brickPadding / 2;
-        bricks[column][row].position.y = row * (brick.height + brickPadding) + brickPadding / 2;
-    }
-}
+const bricks = createBricks(brickTemplate, rows, columns);
 
 //
 // Functions
 //
 
-function continuePlay() {
-    var start_again = true;
-    for (var column=0; column < columns; column++) {
-        for(var row = 0; row < rows; row++) {
-            if (bricks[column][row].status === "active") {
-                start_again = false;
-            }
-        }
+
+var start_again = false;
+
+function checkForRestart(brick) {
+    if (brick.status === "active") {
+        start_again = false;
     }
+}
+
+function resetBrick(brick) {
+    brick.status = "active";
+}
+
+function continuePlay() {
+    start_again = true;
+    foreachBrick(bricks, rows, columns, checkForRestart)
     if (start_again) {
-        for (var column=0; column < columns; column++) {
-            for(var row = 0; row < rows; row++)
-                bricks[column][row].status = "active";
-        }
+        foreachBrick(bricks, rows, columns, resetBrick)
         ball.movement.x *= 3/2;
         ball.movement.y *= 3/2;
         paddle.movement *= 3/2;
     }
 }
 
-function ballBrickCollision() {
-    for (var column=0; column < columns; column++) {
-        for(var row = 0; row < rows; row++) {
-            if (bricks[column][row].status == "active" &&
-                ball.position.y > bricks[column][row].position.y &&
-                ball.position.y < bricks[column][row].position.y + bricks[column][row].height &&
-                ball.position.x > bricks[column][row].position.x &&
-                ball.position.x < bricks[column][row].position.x + bricks[column][row].width) {
-                bricks[column][row].status = "hit";
-                game.score += 1;
-                ball.movement.y *= -1;
-            }
-        }
+
+function ballBrickCollision(brick) {
+    if (brick.status == "active" &&
+        ball.position.y + ball.radius > brick.position.y &&
+        ball.position.y - ball.radius < brick.position.y + brick.height &&
+        ball.position.x + ball.radius > brick.position.x &&
+        ball.position.x - ball.radius < brick.position.x + brick.width) {
+        brick.status = "hit";
+        game.score += 1;
+        ball.movement.y *= -1;
     }
 }
 
@@ -107,10 +103,13 @@ function movePaddle() {
 
 function ballPaddleCollision() {
     if (ball.movement.y > 0 &&
-        ball.position.y + ball.movement.y + ball.radius > paddle.position.y &&
-        ball.position.y + ball.movement.y + ball.radius < paddle.position.y + ball.movement.y &&
-        ball.position.x + ball.movement.x + ball.radius > paddle.position.x &&
-        ball.position.x + ball.movement.x - ball.radius < paddle.position.x + paddle.width) {
+        ball.position.y + ball.radius > paddle.position.y &&
+        ball.position.y - ball.radius < paddle.position.y + paddle.height &&
+        ball.position.x + ball.radius > paddle.position.x &&
+        ball.position.x - ball.radius < paddle.position.x + paddle.width) {
+        if (ball.movement.x > 0 && ball.position.x < paddle.position.x + paddle.width/2 ||
+            ball.movement.x < 0 && ball.position.x > paddle.position.x + paddle.width/2)
+            ball.movement.x *= -1;
         ball.movement.y *= -1;
     }
 }
@@ -144,7 +143,7 @@ function gameOver() {
 function loop() {
     if (game.status == "playing") {
         gameOver();
-        ballBrickCollision();
+        foreachBrick(bricks, rows, columns, ballBrickCollision);
         ballPaddleCollision();
         continuePlay();
         movePaddle();
@@ -152,20 +151,16 @@ function loop() {
     }
 }
 
-function drawBricks() {
-    for (var column=0; column < columns; column++) {
-        for(var row = 0; row < rows; row++) {
-            if (bricks[column][row].status == "active") {
-                drawRect(bricks[column][row].position.x, bricks[column][row].position.y, bricks[column][row].width, bricks[column][row].height, bricks[column][row].colour);
-            }
-        }
+function drawBrick(brick) {
+    if (brick.status == "active") {
+        drawRect(brick.position.x, brick.position.y, brick.width, brick.height, brick.colour);
     }
 }
 
 function draw() {
     drawBoard(board.width, board.height, board.colour);
     drawRect(paddle.position.x, paddle.position.y, paddle.width, paddle.height, paddle.colour);
-    drawBricks();
+    foreachBrick(bricks, rows, columns, drawBrick);
     drawCircle(ball.position.x, ball.position.y, ball.radius, ball.colour);
     drawLives(game.lives);
     drawScore(game.score);

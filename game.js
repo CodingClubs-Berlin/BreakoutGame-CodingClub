@@ -16,9 +16,8 @@ const game = {
 
 // ball
 
-// brick information
+// brickTemplate
 
-// create bricks and set position
 
 
 //
@@ -26,13 +25,17 @@ const game = {
 //
 
 function loop() {
+
 }
 
 function draw() {
+            
 }
 
 function onKeyDown(keyCode) {
+
 }
 
 function onKeyUp(keyCode) {
+
 }
