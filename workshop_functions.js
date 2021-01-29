@@ -46,14 +46,14 @@ function showGameOver() {
 // bricks
 //
 
-function createBricks(brick, rows, columns) {
+function createBricks(brick, rows, columns, padding) {
     var bricks = [];
     for (var row=0; row < rows; row++) {
         bricks[row] = [];
         for(var column = 0; column < columns; column++) {
             bricks[row][column] = copyObject(brick);
-            bricks[row][column].position.x = column * (brick.width + brickPadding) + brickPadding / 2;
-            bricks[row][column].position.y = row * (brick.height + brickPadding) + brickPadding / 2;
+            bricks[row][column].position.x = column * (brick.width + padding) + padding / 2;
+            bricks[row][column].position.y = row * (brick.height + padding) + padding / 2;
         }
     }
     return bricks;
