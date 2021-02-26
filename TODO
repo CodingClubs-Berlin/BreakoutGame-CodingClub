@@ -1,0 +1,3 @@
+Documentation createBricks missing comma
+Wrap rectangle circle collision into workshop function
+funtion rectCircleCollision(rectX, rectY, rectWidth, rectHeight, circleX, circleY, circleRadius)
