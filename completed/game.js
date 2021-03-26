@@ -82,11 +82,7 @@ function continuePlay() {
 
 
 function ballBrickCollision(brick) {
-    if (brick.status == "active" &&
-        ball.position.y + ball.radius > brick.position.y &&
-        ball.position.y - ball.radius < brick.position.y + brick.height &&
-        ball.position.x + ball.radius > brick.position.x &&
-        ball.position.x - ball.radius < brick.position.x + brick.width) {
+    if (brick.status == "active" && rectangleCircleCollision(ball, brick)) {
         brick.status = "hit";
         game.score += 1;
         ball.movement.y *= -1;
@@ -102,11 +98,7 @@ function movePaddle() {
 }
 
 function ballPaddleCollision() {
-    if (ball.movement.y > 0 &&
-        ball.position.y + ball.radius > paddle.position.y &&
-        ball.position.y - ball.radius < paddle.position.y + paddle.height &&
-        ball.position.x + ball.radius > paddle.position.x &&
-        ball.position.x - ball.radius < paddle.position.x + paddle.width) {
+    if (ball.movement.y > 0 && rectangleCircleCollision(ball, paddle)) {
         if (ball.movement.x > 0 && ball.position.x < paddle.position.x + paddle.width/2 ||
             ball.movement.x < 0 && ball.position.x > paddle.position.x + paddle.width/2)
             ball.movement.x *= -1;

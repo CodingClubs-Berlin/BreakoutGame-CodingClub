@@ -75,6 +75,18 @@ function copyObject(object) {
     return JSON.parse(JSON.stringify(object));
 }
 
+// circle needs position.x, position.y and radius
+// rectangle needs position.x, position.y, width and height
+function rectangleCircleCollision(circle, rectangle) {
+    if (circle.position.y + circle.radius > rectangle.position.y &&
+        circle.position.y - circle.radius < rectangle.position.y + rectangle.height &&
+        circle.position.x + circle.radius > rectangle.position.x &&
+        circle.position.x - circle.radius < rectangle.position.x + rectangle.width)
+        return true;
+    else
+        return false;
+}
+
 //
 // game logic
 //
